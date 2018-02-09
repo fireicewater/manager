@@ -1,5 +1,7 @@
 package com.sim.manager.service;
 
+import com.github.pagehelper.PageInfo;
+import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
 
 import java.util.List;
@@ -35,4 +37,6 @@ public interface UserService {
      * @return
      */
     Boolean deleteUsers(List<Integer> userids);
+
+    PageInfo<UserView> findUsersBySerch(UserSearchView userSearchView);
 }

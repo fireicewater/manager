@@ -1,6 +1,8 @@
 package com.sim.manager.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.sim.manager.service.UserService;
+import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    public ResponseEntity getuserlist(UserSearchView userSearchView){
+        PageInfo<UserView> result= userService.findUsersBySerch(userSearchView);
+        return null
+    }
 
     @PostMapping("/register")
     public ResponseEntity addUser(@Validated UserView userView, BindingResult result) {

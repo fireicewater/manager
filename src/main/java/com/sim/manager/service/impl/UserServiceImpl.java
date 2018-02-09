@@ -1,10 +1,13 @@
 package com.sim.manager.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sim.manager.mapper.UserDetailMapper;
 import com.sim.manager.mapper.UserMapper;
 import com.sim.manager.model.User;
 import com.sim.manager.model.UserDetail;
 import com.sim.manager.service.UserService;
+import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +72,13 @@ public class UserServiceImpl implements UserService {
         user.setStatus(false);
         int i = userMapper.updateByExampleSelective(user, example);
         return i != 0;
+    }
+
+    @Override
+    public PageInfo<UserView> findUsersBySerch(UserSearchView userSearchView) {
+        PageHelper.startPage(userSearchView.getPage(), 15);
+
+//        PageInfo page = new PageInfo(list);
+        return null;
     }
 }

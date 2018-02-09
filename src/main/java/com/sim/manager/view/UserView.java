@@ -60,6 +60,8 @@ public class UserView {
     @NotEmpty(message = "销售人员不能为空")
     private String salesman;
 
+    private String createview;
+
     public Integer getId() {
         return id;
     }
@@ -146,5 +148,13 @@ public class UserView {
 
     public void setSalesman(String salesman) {
         this.salesman = salesman;
+    }
+
+    public String getCreateview() {
+        return createview;
+    }
+
+    public void setCreateview(String createview) {
+        this.createview = createview;
     }
 }
