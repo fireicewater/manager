@@ -18,7 +18,7 @@ public class UserSearchView {
     /**
      * 手机
      */
-    private Integer mobile;
+    private String mobile;
 
     /**
      * 支付方式
@@ -44,8 +44,10 @@ public class UserSearchView {
      */
     private String salesman;
 
-    private List<Date> createtime;
-
+    private Date mincreatetime;
+    
+    private Date maxcreatetime;
+     
     public int getPage() {
         return page;
     }
@@ -78,11 +80,11 @@ public class UserSearchView {
         this.sex = sex;
     }
 
-    public Integer getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
@@ -134,11 +136,19 @@ public class UserSearchView {
         this.salesman = salesman;
     }
 
-    public List<Date> getCreatetime() {
-        return createtime;
+    public Date getMincreatetime() {
+        return mincreatetime;
     }
 
-    public void setCreatetime(List<Date> createtime) {
-        this.createtime = createtime;
+    public void setMincreatetime(Date mincreatetime) {
+        this.mincreatetime = mincreatetime;
+    }
+
+    public Date getMaxcreatetime() {
+        return maxcreatetime;
+    }
+
+    public void setMaxcreatetime(Date maxcreatetime) {
+        this.maxcreatetime = maxcreatetime;
     }
 }

@@ -8,21 +8,46 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
-        <result column="creattime" property="creattime" jdbcType="TIMESTAMP"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <resultMap id="userview" type="com.sim.manager.model.User">
+    <resultMap id="userview" type="com.sim.manager.view.UserView">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
-        <result column="creattime" property="creattime" jdbcType="TIMESTAMP"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="sex" property="sex" jdbcType="INT"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
         <result column="mobile" property="mobile" jdbcType="INTEGER"/>
         <result column="paymethod" property="paymethod" jdbcType="VARCHAR"/>
         <result column="cardno" property="cardno" jdbcType="VARCHAR"/>
         <result column="alipay" property="alipay" jdbcType="VARCHAR"/>
         <result column="salesamount" property="salesamount" jdbcType="DECIMAL"/>
         <result column="salesman" property="salesman" jdbcType="VARCHAR"/>
-        <result column="creattime" property="creattime" jdbcType="TIMESTAMP"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <select id="findUserBySearch" resultMap="userview" parameterType="com.sim.manager.view.UserSearchView">
+        select * from user as user
+        INNER JOIN user_detail as userd on userd.userid=user.id
+        WHERE user.status=1
+        <choose>
+            <when test="username !=null and username!=''">and user.username LIKE '%${username}%'</when>
+            <when test="name !=null and name!=''">and userd.username LIKE '%${name}%'</when>
+            <when test="mobile !=null and mobile!=''">and userd.mobile LIKE '%${mobile}%'</when>
+            <when test="paymethod !=null and paymethod!=''">and userd.paymethod LIKE '%${paymethod}%'</when>
+            <when test="cardno !=null and cardno!=''">and userd.cardno LIKE '%${cardno}%'</when>
+            <when test="alipay !=null and alipay!=''">and userd.alipay LIKE '%${alipay}%'</when>
+            <when test="salesman !=null and salesman!=''">and userd.salesman LIKE '%${salesman}%'</when>
+            <when test="minsalesamount !=null and minsalesamount!=''">and userd.salesamount <![CDATA[>]]>
+                #{minsalesamount}
+            </when>
+            <when test="maxsalesamount !=null and maxsalesamount!=''">and userd.salesamount <![CDATA[<]]>
+                #{maxsalesamount}
+            </when>
+            <when test="mincreatetime !=null  and maxcreatetime !=null  ">
+                and user.createtime BETWEEN #{mincreatetime} AND #{maxcreatetime}
+            </when>
+        </choose>
+        ORDER BY user.createtime DESC
+    </select>
 </mapper>

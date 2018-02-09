@@ -11,6 +11,7 @@ import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDetailMapper userDetailMapper;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Override
     public Boolean register(UserView userView) {
@@ -36,11 +40,15 @@ public class UserServiceImpl implements UserService {
         UserDetail userDetail = new UserDetail();
         Date date = new Date();
         BeanUtils.copyProperties(userView, user);
-        user.setCreattime(date);
+        user.setCreatetime(date);
+        String password = user.getPassword();
+        password = bCryptPasswordEncoder.encode(password);
+        ;
+        user.setPassword(password);
         int userid = userMapper.insertUseGeneratedKeys(user);
         BeanUtils.copyProperties(userView, userDetail);
-        userDetail.setUserid(userid);
-        userDetail.setCreattime(date);
+        userDetail.setUserid(user.getId());
+        userDetail.setCreatetime(date);
         int userdetailid = userDetailMapper.insertUseGeneratedKeys(userDetail);
         return userid != 0 || userdetailid != 0;
     }
@@ -56,12 +64,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean updateUser(UserView userView) {
         Integer userid = userView.getId();
-        UserDetail forselect = new UserDetail();
-        forselect.setUserid(userid);
-        UserDetail userDetail = userDetailMapper.selectOne(forselect);
-        BeanUtils.copyProperties(userView, userDetail, "id");
-        int i = userDetailMapper.updateByPrimaryKeySelective(userDetail);
-        return i != 0;
+        Example example = new Example(UserDetail.class);
+        example.createCriteria().andEqualTo("userid", userid);
+        List<UserDetail> userDetails = userDetailMapper.selectByExample(example);
+        if (!userDetails.isEmpty() && userDetails.size() == 1) {
+            UserDetail userDetail = userDetails.get(0);
+            BeanUtils.copyProperties(userView, userDetail, "id");
+            int i = userDetailMapper.updateByPrimaryKeySelective(userDetail);
+            return i != 0;
+        }
+        return false;
     }
 
     @Override
@@ -77,8 +89,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageInfo<UserView> findUsersBySerch(UserSearchView userSearchView) {
         PageHelper.startPage(userSearchView.getPage(), 15);
-
-//        PageInfo page = new PageInfo(list);
+        List<UserView> userlist = userMapper.findUserBySearch(userSearchView);
+        if (!userlist.isEmpty()) {
+            return new PageInfo<>(userlist);
+        }
         return null;
+    }
+
+    @Override
+    public Boolean changpassword(int userid, String password) {
+        User user = userMapper.selectByPrimaryKey(userid);
+        String newpassword = bCryptPasswordEncoder.encode(password);
+        user.setPassword(newpassword);
+        int i = userMapper.updateByPrimaryKeySelective(user);
+        return i != 0;
+    }
+
+    @Override
+    public Boolean validaePassword(Integer userid, String password) {
+        User user = userMapper.selectByPrimaryKey(userid);
+        String password1 = user.getPassword();
+        return bCryptPasswordEncoder.matches(password,password1);
     }
 }

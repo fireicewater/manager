@@ -25,7 +25,7 @@ public class UserDetail {
     /**
      * 手机
      */
-    private Integer mobile;
+    private String mobile;
 
     /**
      * 支付方式
@@ -49,7 +49,7 @@ public class UserDetail {
      */
     private String salesman;
 
-    private Date creattime;
+    private Date createtime;
 
     /**
      * @return id
@@ -120,7 +120,7 @@ public class UserDetail {
      *
      * @return mobile - 手机
      */
-    public Integer getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
@@ -129,7 +129,7 @@ public class UserDetail {
      *
      * @param mobile 手机
      */
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
@@ -220,16 +220,16 @@ public class UserDetail {
     }
 
     /**
-     * @return creattime
+     * @return createtime
      */
-    public Date getCreattime() {
-        return creattime;
+    public Date getCreatetime() {
+        return createtime;
     }
 
     /**
-     * @param creattime
+     * @param createtime
      */
-    public void setCreattime(Date creattime) {
-        this.creattime = creattime;
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
     }
 }

@@ -2,8 +2,10 @@ package com.sim.manager.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.sim.manager.service.UserService;
+import com.sim.manager.view.Result;
 import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,63 +17,98 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    public ResponseEntity getuserlist(UserSearchView userSearchView){
+    @PostMapping("/getuserlist")
+    public Result getuserlist(@RequestBody UserSearchView userSearchView) {
         PageInfo<UserView> result= userService.findUsersBySerch(userSearchView);
-        return null
+        if (null == result) {
+            return new Result(Result.NOTAUTH);
+        }
+        return new Result(Result.SUCCESS, result);
     }
 
     @PostMapping("/register")
-    public ResponseEntity addUser(@Validated UserView userView, BindingResult result) {
+    public Result addUser(@RequestBody @Validated UserView userView, BindingResult result) {
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("参数有错误");
+            return new Result(Result.PARAMERROR);
+        }
+        Boolean haveuser = userService.validtaeUser(userView.getUsername());
+        if (!haveuser) {
+            return new Result(Result.PARAMERROR);
         }
         //用户注册
         Boolean flag = userService.register(userView);
         if (flag) {
-            return ResponseEntity.ok().build();
+            return new Result(Result.SUCCESS);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("插入失败");
+            return new Result(Result.ERROR);
         }
     }
 
     @GetMapping("/validateuser")
-    public ResponseEntity validatorUsername(@RequestParam("username") String username) {
+    public Result validatorUsername(@RequestParam("username") String username) {
         Boolean flag = userService.validtaeUser(username);
         if (flag) {
-            return ResponseEntity.ok().build();
+            return new Result(Result.SUCCESS);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            return new Result(Result.NOTFOND);
         }
     }
 
     @PutMapping("/updateuser")
-    public ResponseEntity updateUser(@Validated UserView userView, BindingResult result) {
+    public Result updateUser(@RequestBody @Validated UserView userView, BindingResult result) {
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("参数有错误");
+            return new Result(Result.PARAMERROR);
         }
         Boolean flag = userService.updateUser(userView);
         if (flag) {
-            return ResponseEntity.ok().build();
+            return new Result(Result.SUCCESS);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("更新失败");
+            return new Result(Result.ERROR);
         }
     }
 
-    @DeleteMapping("/deleteusers")
-    public ResponseEntity deleteUsers(@RequestBody List<Integer> userids) {
+    @PostMapping("/deleteusers")
+    public Result deleteUsers(@RequestBody List<Integer> userids) {
         if (userids.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("删除列表为空");
+
         }
         Boolean flag = userService.deleteUsers(userids);
         if (flag) {
-            return ResponseEntity.ok().build();
+            return new Result(Result.SUCCESS);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("更新失败");
+            return new Result(Result.ERROR);
+        }
+    }
+
+    @PostMapping("/resetpassword")
+    public Result resetPassword(@RequestParam Integer userid, @RequestParam String password) {
+        if (null == userid && StringUtils.isBlank(password)) {
+            return new Result(Result.PARAMERROR);
+        }
+        Boolean flag = userService.changpassword(userid, password);
+        if (flag) {
+            return new Result(Result.SUCCESS);
+        } else {
+            return new Result(Result.ERROR);
+        }
+    }
+
+    @PostMapping("/validatpassword")
+    public Result validatePassword(@RequestParam Integer userid, @RequestParam String password) {
+        if (null == userid && StringUtils.isBlank(password)) {
+            return new Result(Result.PARAMERROR);
+        }
+        Boolean flag = userService.validaePassword(userid, password);
+        if (flag) {
+            return new Result(Result.SUCCESS);
+        } else {
+            return new Result(Result.NOTFOND);
         }
     }
 }

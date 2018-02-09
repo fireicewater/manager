@@ -19,7 +19,7 @@ public class User {
      */
     private Boolean status=true;
 
-    private Date creattime;
+    private Date createtime;
 
     /**
      * @return id
@@ -68,17 +68,17 @@ public class User {
     }
 
     /**
-     * @return creattime
+     * @return createtime
      */
-    public Date getCreattime() {
-        return creattime;
+    public Date getCreatetime() {
+        return createtime;
     }
 
     /**
-     * @param creattime
+     * @param createtime
      */
-    public void setCreattime(Date creattime) {
-        this.creattime = creattime;
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
     }
 
     public Boolean getStatus() {

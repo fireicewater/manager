@@ -1,5 +1,6 @@
 package com.sim.manager.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -10,14 +11,14 @@ public class Amount {
 
     private Integer userid;
 
-    private Long amount;
+    private BigDecimal amount;
 
     /**
      * 状态
      */
     private Boolean status;
 
-    private Date creattime;
+    private Date createtime;
 
     /**
      * @return id
@@ -50,14 +51,14 @@ public class Amount {
     /**
      * @return amount
      */
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
     /**
      * @param amount
      */
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -80,16 +81,16 @@ public class Amount {
     }
 
     /**
-     * @return creattime
+     * @return createtime
      */
-    public Date getCreattime() {
-        return creattime;
+    public Date getCreatetime() {
+        return createtime;
     }
 
     /**
-     * @param creattime
+     * @param createtime
      */
-    public void setCreattime(Date creattime) {
-        this.creattime = creattime;
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
     }
 }

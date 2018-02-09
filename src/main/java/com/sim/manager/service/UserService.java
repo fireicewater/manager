@@ -39,4 +39,8 @@ public interface UserService {
     Boolean deleteUsers(List<Integer> userids);
 
     PageInfo<UserView> findUsersBySerch(UserSearchView userSearchView);
+
+    Boolean changpassword(int userid, String password);
+
+    Boolean validaePassword(Integer userid, String password);
 }

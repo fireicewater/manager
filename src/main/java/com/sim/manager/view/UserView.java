@@ -1,9 +1,7 @@
 package com.sim.manager.view;
 
-import com.sim.manager.validator.UserNameUnique;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 
@@ -15,7 +13,6 @@ public class UserView {
      * 用户名
      */
     @NotEmpty(message = "用户名不能为空")
-    @UserNameUnique(message = "用户名已存在")
     private String username;
     @NotEmpty(message = "密码不能为空")
     private String password;
@@ -32,7 +29,7 @@ public class UserView {
      */
     @NotEmpty(message = "手机不能为空")
     @Pattern(regexp = "^[1][3,4,5,7,8][0-9]{9}$", message = "手机错误")
-    private Integer mobile;
+    private String mobile;
 
     /**
      * 支付方式
@@ -60,7 +57,7 @@ public class UserView {
     @NotEmpty(message = "销售人员不能为空")
     private String salesman;
 
-    private String createview;
+    private String createtime;
 
     public Integer getId() {
         return id;
@@ -102,11 +99,11 @@ public class UserView {
         this.sex = sex;
     }
 
-    public Integer getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
@@ -150,11 +147,27 @@ public class UserView {
         this.salesman = salesman;
     }
 
-    public String getCreateview() {
-        return createview;
+    public String getCreatetime() {
+        return createtime;
     }
 
-    public void setCreateview(String createview) {
-        this.createview = createview;
+    public void setCreatetime(String createtime) {
+        this.createtime = createtime;
+    }
+
+    public UserView() {
+    }
+
+    public UserView(String username, String password, String name, int sex, String mobile, String paymethod, String cardno, String alipay, BigDecimal salesamount, String salesman) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.sex = sex;
+        this.mobile = mobile;
+        this.paymethod = paymethod;
+        this.cardno = cardno;
+        this.alipay = alipay;
+        this.salesamount = salesamount;
+        this.salesman = salesman;
     }
 }
