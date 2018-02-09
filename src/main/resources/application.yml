@@ -1,0 +1,29 @@
+
+
+mybatis:
+    type-aliases-package: com.sim.manager.model
+    mapper-locations: classpath:mapper/*.xml
+
+mapper:
+    mappers:
+        - com.sim.config.MyMapper
+    not-empty: false
+    identity: MYSQL
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/manager
+    username: root
+    password: root
+
+server:
+  port: 9090
+
+
