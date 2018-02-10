@@ -4,10 +4,11 @@ import com.github.pagehelper.PageInfo;
 import com.sim.manager.view.ChangePasswordView;
 import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService{
     /**
      * 用户注册
      *

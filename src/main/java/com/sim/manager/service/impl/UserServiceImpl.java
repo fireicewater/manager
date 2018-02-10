@@ -2,20 +2,24 @@ package com.sim.manager.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sim.manager.mapper.RoleMapper;
 import com.sim.manager.mapper.UserDetailMapper;
 import com.sim.manager.mapper.UserMapper;
+import com.sim.manager.mapper.UserRoleMapper;
+import com.sim.manager.model.Role;
 import com.sim.manager.model.User;
 import com.sim.manager.model.UserDetail;
 import com.sim.manager.service.UserService;
-import com.sim.manager.view.ChangePasswordView;
+import com.sim.manager.view.SysUser;
 import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
@@ -31,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDetailMapper userDetailMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -119,4 +126,18 @@ public class UserServiceImpl implements UserService {
         return userMapper.findUserViewById(userid);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("username", s);
+        List<User> users = userMapper.selectByExample(example);
+        if (!users.isEmpty() && users.size() == 1) {
+            User user = users.get(0);
+            List<Role> roles = roleMapper.findRolesByUserid(user.getId());
+            SysUser sysUser = new SysUser(roles);
+            BeanUtils.copyProperties(user, sysUser);
+            return sysUser;
+        }
+        return null;
+    }
 }
