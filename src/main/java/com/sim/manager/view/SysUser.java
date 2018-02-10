@@ -40,4 +40,12 @@ public class SysUser extends User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 }

@@ -1,7 +1,9 @@
 package com.sim.manager.config.security;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sim.manager.model.User;
+import com.sim.manager.view.SysUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +17,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
@@ -50,12 +55,21 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse res,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
-
+        SysUser principal = (SysUser) auth.getPrincipal();
         String token = Jwts.builder()
-                .setSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
+                .setSubject(principal.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
                 .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
                 .compact();
-        res.addHeader("Authorization", "Bearer " + token);
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("username", principal.getUsername());
+        result.put("userid", principal.getId());
+        result.put("role", principal.getRoles().get(0).getName());
+        String returnStr = JSONObject.toJSONString(result);
+        try (PrintWriter writer = res.getWriter()) {
+            writer.write(returnStr);
+        }
+//        res.addHeader("Authorization", "Bearer " + token);
     }
 }
