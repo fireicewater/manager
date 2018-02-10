@@ -1,6 +1,7 @@
 package com.sim.manager.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sim.manager.view.ChangePasswordView;
 import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
 
@@ -43,4 +44,6 @@ public interface UserService {
     Boolean changpassword(int userid, String password);
 
     Boolean validaePassword(Integer userid, String password);
+
+    UserView findUserByid(Integer userid);
 }

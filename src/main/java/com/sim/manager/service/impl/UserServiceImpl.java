@@ -7,6 +7,7 @@ import com.sim.manager.mapper.UserMapper;
 import com.sim.manager.model.User;
 import com.sim.manager.model.UserDetail;
 import com.sim.manager.service.UserService;
+import com.sim.manager.view.ChangePasswordView;
 import com.sim.manager.view.UserSearchView;
 import com.sim.manager.view.UserView;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
@@ -109,6 +111,12 @@ public class UserServiceImpl implements UserService {
     public Boolean validaePassword(Integer userid, String password) {
         User user = userMapper.selectByPrimaryKey(userid);
         String password1 = user.getPassword();
-        return bCryptPasswordEncoder.matches(password,password1);
+        return bCryptPasswordEncoder.matches(password, password1);
     }
+
+    @Override
+    public UserView findUserByid(Integer userid) {
+        return userMapper.findUserViewById(userid);
+    }
+
 }

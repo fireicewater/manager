@@ -50,4 +50,10 @@
         </choose>
         ORDER BY user.createtime DESC
     </select>
+
+    <select id="findUserViewById" resultMap="userview">
+        select * from user as user
+        INNER JOIN user_detail as userd on userd.userid=user.id
+        WHERE user.status=1 and user.id=#{userid}
+    </select>
 </mapper>
