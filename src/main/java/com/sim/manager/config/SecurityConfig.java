@@ -50,20 +50,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
-                        "/manager/**",
-                        "/static/**"
+                        "/**/*.jpg",
+                        "/**/*.png",
+                        "/manager/**"
                 ).permitAll()
-//                .anyRequest().authenticated()//其余的所有请求都需要验证
+                .anyRequest().authenticated()//其余的所有请求都需要验证
+                .antMatchers("/user/getuserlist",
+                        "/amount/addamount",
+                        "/user/register",
+                        "/user/validateuser",
+                        "/user/updateuser",
+                        "/user/deleteusers",
+                        "/user/resetpassword"
+                ).hasRole("admin")
                 // 对于获取token的rest api要允许匿名访问
-//                .antMatchers("/auth/**").permitAll()
-//                .antMatchers("/admin/**").hasIpAddress("127.0.0.1")
-//                .antMatchers("/admin/**").access("hasAuthority('ROLE_ADMIN')")
                 .and()
                 .addFilter(new JWTLoginFilter(authenticationManager()))
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()));
-        //测试没有权限
-//        http.authorizeRequests()//配置安全策略
-//                .anyRequest().permitAll().and().csrf().disable();
     }
 
 

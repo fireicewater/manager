@@ -9,6 +9,7 @@ import com.sim.manager.mapper.UserRoleMapper;
 import com.sim.manager.model.Role;
 import com.sim.manager.model.User;
 import com.sim.manager.model.UserDetail;
+import com.sim.manager.model.UserRole;
 import com.sim.manager.service.UserService;
 import com.sim.manager.view.SysUser;
 import com.sim.manager.view.UserSearchView;
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserService {
     private RoleMapper roleMapper;
 
     @Autowired
+    private UserRoleMapper userRoleMapper;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -52,13 +56,17 @@ public class UserServiceImpl implements UserService {
         user.setCreatetime(date);
         String password = user.getPassword();
         password = bCryptPasswordEncoder.encode(password);
-        ;
         user.setPassword(password);
         int userid = userMapper.insertUseGeneratedKeys(user);
         BeanUtils.copyProperties(userView, userDetail);
         userDetail.setUserid(user.getId());
         userDetail.setCreatetime(date);
         int userdetailid = userDetailMapper.insertUseGeneratedKeys(userDetail);
+        UserRole userRole = new UserRole();
+        userRole.setUserid(user.getId());
+        //都是用户啊,管理员去数据库改
+        userRole.setRoleid(2);
+        userRoleMapper.insert(userRole);
         return userid != 0 || userdetailid != 0;
     }
 
