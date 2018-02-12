@@ -38,7 +38,7 @@ public class UserController {
             return new Result(Result.PARAMERROR);
         }
         Boolean haveuser = userService.validtaeUser(userView.getUsername());
-        if (!haveuser) {
+        if (haveuser) {
             return new Result(Result.PARAMERROR);
         }
         //用户注册
