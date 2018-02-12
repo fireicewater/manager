@@ -1,6 +1,7 @@
 package com.sim.manager.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.sim.manager.mapper.UserMapper;
 import com.sim.manager.service.UserService;
 import com.sim.manager.view.ChangePasswordView;
 import com.sim.manager.view.Result;
@@ -146,5 +147,20 @@ public class UserController {
         } else {
             return new Result(Result.NOTFOND);
         }
+    }
+
+    /**
+     * 获取被推荐人 username amount
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/getreferrer")
+    public Result getBeReferrerAmount(@RequestParam("username") String username) {
+        if (StringUtils.isBlank(username)) {
+            return new Result(Result.PARAMERROR, "参数不能为空");
+        }
+        List<UserView> userViews = userService.findReferrerByUsername(username);
+        return new Result(Result.SUCCESS, userViews);
     }
 }

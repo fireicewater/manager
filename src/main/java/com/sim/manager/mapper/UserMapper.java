@@ -14,4 +14,6 @@ public interface UserMapper extends MyMapper<User> {
     List<UserView> findUserBySearch(UserSearchView searchView);
 
     UserView findUserViewById(@Param("userid") Integer userid);
+
+    List<UserView> findUserviewBySalesman(@Param("username") String username);
 }

@@ -47,4 +47,6 @@ public interface UserService extends UserDetailsService{
     Boolean validaePassword(Integer userid, String password);
 
     UserView findUserByid(Integer userid);
+
+    List<UserView> findReferrerByUsername(String username);
 }

@@ -56,4 +56,9 @@
         INNER JOIN user_detail as userd on userd.userid=user.id
         WHERE user.status=1 and user.id=#{userid}
     </select>
+    <select id="findUserviewBySalesman" resultMap="userview">
+         select * from user as user
+        INNER JOIN user_detail as userd on userd.userid=user.id
+        WHERE user.status=1 and userd.salesman=#{username}
+    </select>
 </mapper>

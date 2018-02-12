@@ -148,4 +148,9 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public List<UserView> findReferrerByUsername(String username) {
+        return userMapper.findUserviewBySalesman(username);
+    }
 }

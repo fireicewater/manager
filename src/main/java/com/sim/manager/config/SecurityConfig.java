@@ -67,6 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JWTLoginFilter(authenticationManager()))
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()));
+        //测试没有权限
+//        http.authorizeRequests()//配置安全策略
+//                .anyRequest().permitAll().and().csrf().disable();
     }
 
 
